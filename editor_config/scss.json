@@ -1,0 +1,38 @@
+{
+  "current": "Espresso",
+  "presets": {
+    "Espresso": {
+      "body_font_family": [
+        "Geneva,Tahoma,Verdana,sans-serif"
+      ],
+      "body_font_size": "16px",
+      "body_text_color": "#ffffff",
+      "heading_font_family": [
+        "'HelveticaNeue','Helvetica Neue',Helvetica,Arial,sans-serif"
+      ],
+      "heading_font_weight": "normal",
+      "heading_font_size": "32px",
+      "heading_text_color": "#ffffff",
+      "body_bg_image": "\"https://s3-ap-southeast-1.amazonaws.com/eesb.themes/onboarding/espresso/bg.jpg\"",
+      "body_bg_color": "#ffffff",
+      "bg_img_position": "top center",
+      "body_bg_repeat": "repeat",
+      "body_bg_attachment": "scroll",
+      "wrapper_bg_color": "rgba(255, 255, 255, 0)",
+      "header_logo_font_family": [
+        "'Avant Garde',Avantgarde,'Century Gothic',CenturyGothic,'AppleGothic',sans-serif"
+      ],
+      "header_logo_font_weight": "normal",
+      "header_logo_font_size": "32px",
+      "header_logo_color": "#743a19",
+      "link_text_color": "#edd4a6",
+      "logo_width": "300",
+      "topbar_text_color": "#ffffff",
+      "topbar_bg_color": "rgba(116, 58, 25, 0)",
+      "btn_text_color": "#326d46",
+      "btn_bg_color": "#edd4a6",
+      "navi_border_color": "#ddd",
+      "social_link_color": "#edd4a6"
+    }
+  }
+}

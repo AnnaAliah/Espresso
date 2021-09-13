@@ -1,0 +1,53 @@
+{% app_snippet 'register/content_top' %}
+<div class="grid">
+
+  <div class="grid__item large--one-half small--text-center">
+    <div class="section-header section-header--large">
+      <h1 class="section-header__title">{{ 'customer.register.title' | t }}</h1>
+    </div>
+
+    {% comment %}
+      This form must use 'create_customer'
+    {% endcomment %}
+    <form method="post" action="/account/register">
+      <input type="hidden" name="_token" value="{% csrf %}">
+
+      {{ form.errors | default_errors }}
+
+      <label for="FirstName" class="label--hidden">{{ 'customer.register.first_name' | t }}</label>
+      <input type="text" name="customer[first_name]" id="FirstName" placeholder="{{ 'customer.register.first_name' | t }}" {% if form.first_name %}value="{{ form.first_name }}"{% endif %} autocapitalize="words" autofocus required>
+
+      <label for="LastName" class="label--hidden">{{ 'customer.register.last_name' | t }}</label>
+      <input type="text" name="customer[last_name]" id="LastName" placeholder="{{ 'customer.register.last_name' | t }}" {% if form.last_name %}value="{{ form.last_name }}"{% endif %} autocapitalize="words" required>
+
+      {%if shop.phone_account_enabled == true %}
+        {% assign account_placeholder = 'customer.register.email_or_phone' %}
+      {% else %}
+        {% assign account_placeholder = 'customer.register.email' %}
+      {% endif %}
+
+      <label for="EmailOrPhone" class="label--hidden">{{ account_placeholder | t }}</label>
+      <input type="text" name="customer[email_or_phone]" id="EmailOrPhone" placeholder="{{ account_placeholder | t }}" {% if form.errors contains "email_or_phone" %} class="error"{% elsif form.email_or_phone %} value="{{ form.email_or_phone }}"{% endif %} autocorrect="off" autocapitalize="off" required>
+      <label for="CreatePassword" class="label--hidden">{{ 'customer.register.password' | t }}</label>
+      <input type="password" name="customer[password]" id="CreatePassword" placeholder="{{ 'customer.register.password' | t }}" {% if form.errors contains "password" %} class="error"{% endif %} required>
+
+      <input type="text" name="customer[display_name]" id="displayName" class="hp" tabindex="-1" autocomplete="off">
+      <input type="password" name="customer[confirm_password]" id="confirmPassword" class="hp" tabindex="-1" autocomplete="off">
+      <input type="email" name="customer[confirm_email]" id="confirmEmail" class="hp" tabindex="-1" autocomplete="off">
+      <style>.hp{ display:none !important }</style>
+
+      <p>
+        {{ shop.name | register_tos: contents.terms-policy.links }}
+      </p>
+
+      <p>
+        <input type="submit" id="create_acc" value="{{ 'customer.register.submit' | t }}" class="btn">
+        {% app_snippet 'register/button' %}
+      </p>
+      <a href="{{ shop.url }}">{{ 'customer.register.cancel' | t }}</a>
+
+    </form>
+  </div>
+
+</div>
+{% app_snippet 'register/content_bottom' %}
