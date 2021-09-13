@@ -12,54 +12,25 @@
     <div class="grid product-single__hero">
       <div class="grid__item large--one-half">
 
-        {% if settings.product_thumbnails_position == 'below' or product.images.size < 2 %}
-          <div class="product-single__photos " id="ProductPhoto">
-            {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
-            <img src="{{ featured_image | img_url: '1024x' }}" alt="{{ featured_image.alt | escape }}" id="ProductPhotoImg"{% if settings.product_image_zoom_type == 'zoom-in' %} data-zoom="{{ featured_image | img_url: '1024x' }}"{% endif %} data-image-type="{{ featured_image.type }}" data-image-id="{{ featured_image.id }}" class="product-zoomable mfp-{{ featured_image.type }}">
-          </div>
-
-          {% if product.images.size > 1 %}
-
-            <ul class="product-single__thumbnails grid-uniform" id="ProductThumbs">
+        <div id="ProductPhoto" class="product-slider {% if product.images.size > 1 %}flexslider-has-thumbs{% endif %}">
+          <div id="overlayZoom"></div>
+          {% if product.images.size > 0 %}
+          <div class="product-flexslider flexslider transparent">
+            <ul class="slides">
               {% for image in product.images %}
-                <li class="grid__item large--one-third medium-down--one-third ">
-                  <a data-image-id="{{ image.id }}" data-image-type="{{ image.type }}" href="{{ image.src | img_url: '1024x' }}" class="product-single__thumbnail product-zoomable mfp-{{ image.type }}">
-                    <img src="{{ image.src | img_url: 'social-share' }}" alt="{{ image.alt | escape }}">
-                  </a>
-                </li>
+              <li data-thumb="{{ image.src | img_url: 'social-share' }}" id="image-id-{{ image.id }}">
+                <div class="slide-img product-zoomable mfp-{{ image.type }}" data-image-id="{{ image.id }}" data-image-type="{{ image.type }}" href="{{ image.src | img_url: '1024x' }}">
+                  <img src="{{ image.src | img_url: '1024x' }}" alt="{{ image.alt | escape }}" onmousemove="zoomIn(event)" onmouseout="zoomOut()">
+                </div>
+              </li>
               {% endfor %}
-              {% app_snippet 'product/gallery' %}
             </ul>
-
-          {% endif %}
-
-        {% else %}
-
-          <div class="grid">
-
-            <div class="grid__item four-fifths product-single__photos" id="ProductPhoto">
-              {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
-              <img src="{{ featured_image | img_url: '1024x' }}" alt="{{ featured_image.alt | escape }}" id="ProductPhotoImg"{% if settings.product_image_zoom_type == 'zoom-in' %} data-zoom="{{ featured_image | img_url: '1024x' }}"{% endif %} data-image-id="{{ featured_image.id }}">
-            </div>
-
-            <div class="grid__item one-fifth">
-
-              <ul class="grid product-single__thumbnails" id="ProductThumbs">
-                {% for image in product.images %}
-                  <li class="grid__item">
-                    <a data-image-id="{{ image.id }}" href="{{ image.src | img_url: '1024x' }}" class="product-single__thumbnail">
-                      <img src="{{ image.src | img_url: 'grande' }}" alt="{{ image.alt | escape }}">
-                    </a>
-                  </li>
-                {% endfor %}
-                {% app_snippet 'product/gallery' %}
-              </ul>
-
-            </div>
-
           </div>
-
-        {% endif %}
+          {% else %}
+          {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+          <img src="{{ featured_image | img_url: '1024x' }}" alt="{{ featured_image.alt | escape }}">
+          {% endif %}
+        </div>
 
         {% if settings.product_image_zoom_type == 'lightbox' %}
         <ul class="gallery hidden">
@@ -163,6 +134,66 @@
 </div>
 {% app_snippet 'product/content_bottom' %}
 {{ 'option_selection.js' | global_asset_url | script_tag }}
+
+<script type="text/javascript">
+  $(".flexslider").addClass("transparent");
+    var mobileSize = true;
+  if(window.innerWidth > 768){
+        mobileSize = false;
+    }
+  window.timberSlider = window.timberSlider || {};
+
+  timberSlider.cacheSelectors = function () {
+    timberSlider.cache = {
+      $slider: $('.flexslider')
+    }
+  };
+
+  timberSlider.init = function () {
+    timberSlider.cacheSelectors();
+    timberSlider.sliders(); 
+    $(".flexslider").removeClass("transparent");
+    
+  };
+
+  timberSlider.sliders = function () {
+    var $slider = timberSlider.cache.$slider,
+        sliderArgs = {
+          animation: 'slide',
+          animationSpeed: 500,
+          pauseOnHover: true,
+          keyboard: false,
+          slideshow: false,
+          slideshowSpeed: '4000',
+          smoothHeight: false,
+          touch: true,
+          animationLoop: false,
+          controlNav: mobileSize ? true : "thumbnails" ,
+        };
+
+    if ($slider.length) {
+
+      if ($slider.find('li').length === 1) {
+        sliderArgs.slideshow = false;
+        sliderArgs.slideshowSpeed = 0;
+        sliderArgs.controlNav = false;
+        sliderArgs.directionNav = false;
+      }
+
+      $slider.flexslider(sliderArgs);
+    }    
+  };
+  
+
+  // Initialize slider on doc ready
+  
+  $(document).ready(function() {
+    timberSlider.init();
+  });
+
+</script>
+
+
 <script>
   $(document).ready(function(){
      // Hide the add to cart button when price less than 0
@@ -249,3 +280,4 @@ jQuery(function($) {
 });
 
 </script>
+
